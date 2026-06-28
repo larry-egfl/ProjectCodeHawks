@@ -50,10 +50,10 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {TokenUri} from "./TokenUri.sol";
 import {SantaToken} from "./SantaToken.sol";
 
-/* 
+/*
  * @title SantasList
  * @author South Pole Elves 0x815f577f1c1bce213c012f166744937c889daf17
- * 
+ *
  * @notice Santas's naughty or nice list, all on chain!
  */
 contract SantasList is ERC721, TokenUri {
@@ -76,8 +76,10 @@ contract SantasList is ERC721, TokenUri {
     /*//////////////////////////////////////////////////////////////
                             STATE VARIABLES
     //////////////////////////////////////////////////////////////*/
-    mapping(address person => Status naughtyOrNice) private s_theListCheckedOnce;
-    mapping(address person => Status naughtyOrNice) private s_theListCheckedTwice;
+    mapping(address person => Status naughtyOrNice)
+        private s_theListCheckedOnce;
+    mapping(address person => Status naughtyOrNice)
+        private s_theListCheckedTwice;
     address private immutable i_santa;
     uint256 private s_tokenCounter;
     SantaToken private immutable i_santaToken;
@@ -111,22 +113,23 @@ contract SantasList is ERC721, TokenUri {
         i_santaToken = new SantaToken(address(this));
     }
 
-    /* 
-     * @notice Do a first pass on someone if they are naughty or nice. 
+    /*
+     * @notice Do a first pass on someone if they are naughty or nice.
      * Only callable by santa
-     * 
+     *
      * @param person The person to check
      * @param status The status of the person
      */
     function checkList(address person, Status status) external {
+        //     FIXME
         s_theListCheckedOnce[person] = status;
         emit CheckedOnce(person, status);
     }
 
-    /* 
-     * @notice Do a second pass on someone if they are naughty or nice. 
+    /*
+     * @notice Do a second pass on someone if they are naughty or nice.
      * Only callable by santa. Only if they pass this are they eligible for a present.
-     * 
+     *
      * @param person The person to check
      * @param status The status of the person
      */
@@ -149,14 +152,18 @@ contract SantasList is ERC721, TokenUri {
             revert SantasList__NotChristmasYet();
         }
         if (balanceOf(msg.sender) > 0) {
+            //     FIXME应该可以怀疑的。他是说余额 token > 0 才被拒绝，但我把我的余额再发送到我的另一个钱包地址里面，这个检查不就通过了吗？
             revert SantasList__AlreadyCollected();
         }
-        if (s_theListCheckedOnce[msg.sender] == Status.NICE && s_theListCheckedTwice[msg.sender] == Status.NICE) {
+        if (
+            s_theListCheckedOnce[msg.sender] == Status.NICE &&
+            s_theListCheckedTwice[msg.sender] == Status.NICE
+        ) {
             _mintAndIncrement();
             return;
         } else if (
-            s_theListCheckedOnce[msg.sender] == Status.EXTRA_NICE
-                && s_theListCheckedTwice[msg.sender] == Status.EXTRA_NICE
+            s_theListCheckedOnce[msg.sender] == Status.EXTRA_NICE && //     FIXME 这个就是源于121行的没有加onlysanta这个修饰符任何人都可以随机的修改自己状态
+            s_theListCheckedTwice[msg.sender] == Status.EXTRA_NICE
         ) {
             _mintAndIncrement();
             i_santaToken.mint(msg.sender);
@@ -165,12 +172,12 @@ contract SantasList is ERC721, TokenUri {
         revert SantasList__NotNice();
     }
 
-    /* 
+    /*
      * @notice Buy a present for someone else. This should only be callable by anyone with SantaTokens.
      * @dev You'll first need to approve the SantasList contract to spend your SantaTokens.
      */
     function buyPresent(address presentReceiver) external {
-        i_santaToken.burn(presentReceiver);
+        i_santaToken.burn(presentReceiver); //     FIXME，给某人买礼物，烧的的是接受者的token，应该改成收发送者的token，这里应该是定义成to的地址，而不是自己锻造一个礼物，这样的话，结构就是接受者的token减少了，赠送礼物的人的币反而变多了
         _mintAndIncrement();
     }
 
@@ -184,7 +191,9 @@ contract SantasList is ERC721, TokenUri {
     /*//////////////////////////////////////////////////////////////
                              VIEW AND PURE
     //////////////////////////////////////////////////////////////*/
-    function tokenURI(uint256 /* tokenId */ ) public pure override returns (string memory) {
+    function tokenURI(
+        uint256 /* tokenId */
+    ) public pure override returns (string memory) {
         return TOKEN_URI;
     }
 
@@ -192,11 +201,15 @@ contract SantasList is ERC721, TokenUri {
         return address(i_santaToken);
     }
 
-    function getNaughtyOrNiceOnce(address person) external view returns (Status) {
+    function getNaughtyOrNiceOnce(
+        address person
+    ) external view returns (Status) {
         return s_theListCheckedOnce[person];
     }
 
-    function getNaughtyOrNiceTwice(address person) external view returns (Status) {
+    function getNaughtyOrNiceTwice(
+        address person
+    ) external view returns (Status) {
         return s_theListCheckedTwice[person];
     }
 
