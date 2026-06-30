@@ -9,3 +9,12 @@ url = https://github.com/openzeppelin/openzeppelin-contracts
 [submodule "ai-santas-list/lib/solmate-bad"]
 path = ai-santas-list/lib/solmate-bad
 url = https://github.com/patrickalphac/solmate-bad
+[submodule "ai-puppy-raffle/lib/forge-std"]
+	path = ai-puppy-raffle/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "ai-puppy-raffle/lib/openzeppelin-contracts"]
+	path = ai-puppy-raffle/lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts
+[submodule "ai-puppy-raffle/lib/base64"]
+	path = ai-puppy-raffle/lib/base64
+	url = https://github.com/Brechtpd/base64
