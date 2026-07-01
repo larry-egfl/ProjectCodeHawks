@@ -21,6 +21,24 @@ Add a map that save the related the `manager` and the `palyer` who played the ra
 
 ---
 
+## [H-02] Anyone can call the `selectWinner` function
+
+**Location:** `src/PuppyRaffle.sol` line 128  
+**Severity:** High
+
+**Description:**  
+Anyone can call the `selectWinner` function,witch allow attacker caculate the winnerIndex to make himself address becaming a winnerIndex. 
+
+**Proof of Concept:**  
+```solidity
+
+```
+
+**Recommendation:**  
+Add access control (e.g. onlyOwner or a role-based check) to restrict who can call this function.
+
+---
+
 
 ## [M-01] The design of the line is not reasonable
 
