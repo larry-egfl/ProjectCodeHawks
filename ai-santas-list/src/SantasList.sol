@@ -50,7 +50,7 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {TokenUri} from "./TokenUri.sol";
 import {SantaToken} from "./SantaToken.sol";
 
-/*
+/* 
  * @title SantasList
  * @author South Pole Elves 0x815f577f1c1bce213c012f166744937c889daf17
  *
@@ -103,7 +103,7 @@ contract SantasList is ERC721, TokenUri {
             revert SantasList__NotSanta();
         }
         _;
-    }
+    } 
 
     /*//////////////////////////////////////////////////////////////
                                FUNCTIONS
