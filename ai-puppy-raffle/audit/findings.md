@@ -56,6 +56,28 @@ Add access control (e.g. onlyOwner or a role-based check) to restrict who can ca
 **Recommendation:**  
 Delete the line 98
 
+
+---
+
+
+## [M-02] The design of the line is not reasonable
+
+**Location:** `src/PuppyRaffle.sol` line 151  
+**Severity:** medium
+
+**Description:**  
+ Consider put  `(bool success,) = winner.call{value: prizePool}("")` ahead of `delete player` to ensure all storage is revalued properly.
+
+**Proof of Concept:**  
+```solidity
+
+```
+
+**Recommendation:**  
+`(bool success,) = winner.call{value: prizePool}("");` should put ahead of `delete player`
+
+---
+
 ## [L-01] `getActivePlayerIndex` that is be created is not used in the contract
 
 **Location:** `src/PuppyRaffle.sol` line 110  
